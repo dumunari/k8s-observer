@@ -1,4 +1,4 @@
-package k8s_utils
+package infrastructure
 
 import (
 	"flag"
@@ -10,27 +10,40 @@ import (
 	"path/filepath"
 )
 
-var clientset *kubernetes.Clientset
+var (
+	clientset      kubernetes.Interface
+	IClusterConfig ClusterConfigInterface = &ClusterConfig{}
+)
 
-func init() {
-	clientset = ClusterConfig()
+type ClusterConfig struct{}
+
+type ClusterConfigInterface interface {
+	RetrieveClientSet() kubernetes.Interface
+	ClusterConfig() kubernetes.Interface
 }
 
-func RetrieveClientSet() *kubernetes.Clientset {
+func init() {
+	clientset = IClusterConfig.ClusterConfig()
+}
+
+func ProvideClusterConfig() *ClusterConfig {
+	return &ClusterConfig{}
+}
+
+func (clusterConfig *ClusterConfig) RetrieveClientSet() kubernetes.Interface {
 	return clientset
 }
 
-func ClusterConfig() *kubernetes.Clientset {
-	var clusterConfig *rest.Config
-
+func (clusterConfig *ClusterConfig) ClusterConfig() kubernetes.Interface {
+	var clusterConfiguration *rest.Config
 	if os.Getenv("IN_CLUSTER") == "true" {
-		clusterConfig = retrieveInClusterConfig()
+		clusterConfiguration = retrieveInClusterConfig()
 	} else {
 		setKubeconfigFlag()
-		clusterConfig = retrieveOutOfClusterConfig()
+		clusterConfiguration = retrieveOutOfClusterConfig()
 	}
 
-	clientset, err := kubernetes.NewForConfig(clusterConfig)
+	clientset, err := kubernetes.NewForConfig(clusterConfiguration)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -57,5 +70,4 @@ func retrieveOutOfClusterConfig() *rest.Config {
 func setKubeconfigFlag() {
 	home := homedir.HomeDir()
 	flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "")
-	flag.Parse()
 }

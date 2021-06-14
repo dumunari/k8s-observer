@@ -9,11 +9,11 @@ var servicesRoutes = []Route{
 	{
 		Uri:      "/services",
 		Method:   http.MethodGet,
-		Function: controllers.GetServicesController,
+		Function: controllers.IServicesController.GetServicesController,
 	},
 	{
 		Uri:      "/services/{applicationGroup}",
 		Method:   http.MethodGet,
-		Function: controllers.GetServicesByApplicationGroupController,
+		Function: controllers.IServicesController.GetServicesByApplicationGroupController,
 	},
 }

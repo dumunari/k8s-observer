@@ -10,9 +10,7 @@ import (
 func HealthcheckController(writer http.ResponseWriter, r *http.Request) {
 	log.Println("HealthcheckController")
 
-	healthcheck := models.Healthcheck{
+	utils.IResponse.JSON(writer, http.StatusOK, models.Message{
 		Message: "Server is up",
-	}
-
-	utils.JSON(writer, http.StatusOK, healthcheck)
+	})
 }

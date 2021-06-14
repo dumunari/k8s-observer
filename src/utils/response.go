@@ -6,7 +6,22 @@ import (
 	"net/http"
 )
 
-func JSON(writer http.ResponseWriter, statusCode int, data interface{}) {
+var (
+	IResponse ResponseInterface = &Response{}
+)
+
+type Response struct{}
+
+type ResponseInterface interface {
+	JSON(http.ResponseWriter, int, interface{})
+	Error(http.ResponseWriter, int, error)
+}
+
+func ProvideResponseUtils() *Response {
+	return &Response{}
+}
+
+func (responseInterface *Response) JSON(writer http.ResponseWriter, statusCode int, data interface{}) {
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(statusCode)
 
@@ -15,8 +30,8 @@ func JSON(writer http.ResponseWriter, statusCode int, data interface{}) {
 	}
 }
 
-func Error(writer http.ResponseWriter, statusCode int, error error) {
-	JSON(writer, statusCode, struct {
+func (responseInterface *Response) Error(writer http.ResponseWriter, statusCode int, error error) {
+	IResponse.JSON(writer, statusCode, struct {
 		Error string `json:"message"`
 	}{
 		Error: error.Error(),
