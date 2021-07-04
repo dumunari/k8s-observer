@@ -73,9 +73,9 @@ GET `/nodes`
 
 There are two configured alerts:
 1) DeploymentsCheck
-Every 5s, k8s-observer will check if there are any deployments with unavailable replicas and if it finds it, it will print
+- Every 5s, k8s-observer will check if there are any deployments with unavailable replicas and if it finds it, it will print
 the information on console.
 
 2) NodesCheck
-Every 5s, k8s-observer will check if there are any nodes in bad conditions and if it finds it, it will print its
+- Every 5s, k8s-observer will check if there are any nodes in bad conditions and if it finds it, it will print its
 information on console
