@@ -1,4 +1,4 @@
-#K8s Observer
+# K8s Observer
 
 K8s Observer is an application created for the sake of studying observability, Golang and chaos engineering.
 It's an ongoing process, and the main goal here is to learn :)
