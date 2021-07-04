@@ -1,6 +1,7 @@
 #K8s Observer
 
-K8s Observer is a first step to start our observability.
+K8s Observer is an application created for the sake of studying observability, Golang and chaos engineering.
+It's an ongoing process, and the main goal here is to learn :)
 
 ## How to run it?
 
@@ -27,48 +28,54 @@ K8s observer will be applied to the default namespace
 
 ## How to use it?
 
+### API mode
+
 There are two endpoints exposed:
-1) GET /services
-- Services with no application group will have the application group attribute omitted.
-- Using this endpoint will return a list of all services deployed in the cluster, e.g:
+1) GET /deployments
+- Using this endpoint will return a list of all deployments and its replicas count by status, e.g:
 ```
-GET `/services`
+GET `/deployments`
 [
   {
     "name": "first",
-    "applicationGroup": "alpha",
-    "runningPodsCount": 2
+    "runningReplicas": 2,
+    "desiredReplicas": 1
   },
   {
     "name": "second",
-    "runningPodsCount": 1
+    "runningReplicas": 2,
+    "unavailableReplicas": 6,
+    "desiredReplicas": 8,
   },
   ...
 ]
 ```
 
-2) GET /services/{applicationGroup}
-- Using this endpoint you can filter the services by application group, e.g:
+ps: the unavailableReplicas attribute will not be presented if there are no unavailabeReplicas.
+
+2) GET /nodes
+- Using this endpoint will return a list of all nodes and information about its conditions, e.g:
 ```
-GET `/services/{applicationGroup}`
+GET `/nodes`
 [
   {
-    "name": "foobar",
-    "applicationGroup": "<applicationGroup>",
-    "runningPodsCount": 1
-  },
+    "name": "docker-desktop",
+    "memoryPressure": "False",
+    "diskPressure": "False",
+    "pidPressure": "False",
+    "ready": "True"
+  }
   ...
 ]
 ```
 
-- If you want to filter by services with no application group, you can call it as:
-```
-GET `/services/none`
-[
-  {
-    "name": "foobar",
-    "runningPodsCount": 1
-  },
-  ...
-]
-```
+### Alerts mode
+
+There are two configured alerts:
+1) DeploymentsCheck
+Every 5s, k8s-observer will check if there are any deployments with unavailable replicas and if it finds it, it will print
+the information on console.
+
+2) NodesCheck
+Every 5s, k8s-observer will check if there are any nodes in bad conditions and if it finds it, it will print its
+information on console

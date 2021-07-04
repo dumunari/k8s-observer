@@ -1,4 +1,4 @@
-package infrastructure
+package client
 
 import (
 	"flag"
@@ -6,36 +6,36 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
+	"log"
 	"os"
 	"path/filepath"
 )
 
 var (
-	clientset      kubernetes.Interface
-	IClusterConfig ClusterConfigInterface = &ClusterConfig{}
+	clientset kubernetes.Interface
+	IConfig   ConfigInterface = &Config{}
 )
 
-type ClusterConfig struct{}
+type Config struct{}
 
-type ClusterConfigInterface interface {
+type ConfigInterface interface {
 	RetrieveClientSet() kubernetes.Interface
-	ClusterConfig() kubernetes.Interface
+	ClientConfig() kubernetes.Interface
 }
 
 func init() {
-	clientset = IClusterConfig.ClusterConfig()
+	clientset = IConfig.ClientConfig()
 }
 
-func ProvideClusterConfig() *ClusterConfig {
-	return &ClusterConfig{}
-}
-
-func (clusterConfig *ClusterConfig) RetrieveClientSet() kubernetes.Interface {
+func (clientConfigReceiver *Config) RetrieveClientSet() kubernetes.Interface {
+	log.Println("[Config] - RetrieveClientSet")
 	return clientset
 }
 
-func (clusterConfig *ClusterConfig) ClusterConfig() kubernetes.Interface {
+func (clientConfigReceiver *Config) ClientConfig() kubernetes.Interface {
+	log.Println("[Config] - ClientConfig")
 	var clusterConfiguration *rest.Config
+
 	if os.Getenv("IN_CLUSTER") == "true" {
 		clusterConfiguration = retrieveInClusterConfig()
 	} else {
@@ -52,6 +52,7 @@ func (clusterConfig *ClusterConfig) ClusterConfig() kubernetes.Interface {
 }
 
 func retrieveInClusterConfig() *rest.Config {
+	log.Println("[Config] - retrieveInClusterConfig")
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		panic(err.Error())
@@ -60,6 +61,7 @@ func retrieveInClusterConfig() *rest.Config {
 }
 
 func retrieveOutOfClusterConfig() *rest.Config {
+	log.Println("[Config] - retrieveOutOfClusterConfig")
 	config, err := clientcmd.BuildConfigFromFlags("", flag.Lookup("kubeconfig").Value.(flag.Getter).Get().(string))
 	if err != nil {
 		panic(err.Error())
@@ -68,6 +70,7 @@ func retrieveOutOfClusterConfig() *rest.Config {
 }
 
 func setKubeconfigFlag() {
+	log.Println("[Config] - setKubeconfigFlag")
 	home := homedir.HomeDir()
 	flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "")
 }

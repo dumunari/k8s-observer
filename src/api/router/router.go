@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gorilla/mux"
-	"observer/src/router/routes"
+	"observer/src/api/router/routes"
 )
 
 func GenerateRouter() *mux.Router {
