@@ -3,15 +3,16 @@ package services
 import (
 	"errors"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
+	"log"
+	"os"
+	"testing"
+
+	"github.com/dumunari/k8s-observer/src/api/services"
+	"github.com/stretchr/testify/assert"
 	v12 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"log"
-	"observer/src/api/services"
-	"os"
-	"testing"
 )
 
 func TestMain(m *testing.M) {
@@ -21,7 +22,7 @@ func TestMain(m *testing.M) {
 
 func TestRetrieveModulesService_2_deployments_found(t *testing.T) {
 	//arrange
-	retrieveDeployments = func() (*v12.DeploymentList, error){
+	retrieveDeployments = func() (*v12.DeploymentList, error) {
 		return &v12.DeploymentList{
 			Items: []v12.Deployment{
 				{
@@ -80,7 +81,7 @@ func TestRetrieveModulesService_2_deployments_found(t *testing.T) {
 
 func TestRetrieveModulesService_error(t *testing.T) {
 	// arrange
-	retrieveDeployments = func() (*v12.DeploymentList, error){
+	retrieveDeployments = func() (*v12.DeploymentList, error) {
 		return &v12.DeploymentList{
 			Items: []v12.Deployment{},
 		}, errors.New("repository error")
@@ -104,7 +105,7 @@ func TestRetrieveModulesService_error(t *testing.T) {
 
 func TestRetrieveModulesService_0_deployments_found(t *testing.T) {
 	//assert
-	retrieveDeployments = func() (*v12.DeploymentList, error){
+	retrieveDeployments = func() (*v12.DeploymentList, error) {
 		return &v12.DeploymentList{
 			Items: []v12.Deployment{},
 		}, nil

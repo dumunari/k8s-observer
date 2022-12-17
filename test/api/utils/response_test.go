@@ -4,12 +4,13 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"observer/src/api/utils"
-	"observer/src/models"
 	"testing"
+
+	"github.com/dumunari/k8s-observer/src/api/utils"
+	"github.com/dumunari/k8s-observer/src/models"
 )
 
-func TestJSONSuccess(t *testing.T){
+func TestJSONSuccess(t *testing.T) {
 	//arrange
 	writer := httptest.NewRecorder()
 	statusCode := http.StatusOK
@@ -21,7 +22,7 @@ func TestJSONSuccess(t *testing.T){
 	response.JSON(writer, statusCode, data)
 }
 
-func TestError(t *testing.T){
+func TestError(t *testing.T) {
 	//arrange
 	writer := httptest.NewRecorder()
 	statusCode := http.StatusInternalServerError

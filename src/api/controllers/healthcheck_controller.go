@@ -3,12 +3,13 @@ package controllers
 import (
 	"log"
 	"net/http"
-	"observer/src/api/utils"
-	"observer/src/models"
+
+	"github.com/dumunari/k8s-observer/src/api/utils"
+	"github.com/dumunari/k8s-observer/src/models"
 )
 
 type HealtcheckController struct {
-	ResponseUtils      utils.ResponseInterface
+	ResponseUtils utils.ResponseInterface
 }
 
 func (healthcheckControllerReceiver *HealtcheckController) GetHealthcheck(writer http.ResponseWriter, _ *http.Request) {

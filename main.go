@@ -3,8 +3,9 @@ package main
 import (
 	"log"
 	"net/http"
-	"observer/src/alerts"
-	"observer/src/api/router"
+
+	"github.com/dumunari/k8s-observer/src/alerts"
+	"github.com/dumunari/k8s-observer/src/api/router"
 )
 
 func main() {

@@ -2,8 +2,9 @@ package services
 
 import (
 	"log"
-	"observer/src/api/repositories"
-	"observer/src/models"
+
+	"github.com/dumunari/k8s-observer/src/api/repositories"
+	"github.com/dumunari/k8s-observer/src/models"
 )
 
 type NodesService struct {
@@ -25,11 +26,11 @@ func (nodesServiceInterface *NodesService) RetrieveNodes() ([]models.Node, error
 
 	for _, clusterNode := range clusterNodes.Items {
 		node := models.Node{
-			Name: clusterNode.Name,
+			Name:           clusterNode.Name,
 			MemoryPressure: string(clusterNode.Status.Conditions[0].Status),
-			DiskPressure: string(clusterNode.Status.Conditions[1].Status),
-			PIDPressure: string(clusterNode.Status.Conditions[2].Status),
-			Ready: string(clusterNode.Status.Conditions[3].Status),
+			DiskPressure:   string(clusterNode.Status.Conditions[1].Status),
+			PIDPressure:    string(clusterNode.Status.Conditions[2].Status),
+			Ready:          string(clusterNode.Status.Conditions[3].Status),
 		}
 		nodes = append(nodes, node)
 	}

@@ -2,8 +2,9 @@ package services
 
 import (
 	"log"
-	"observer/src/api/repositories"
-	"observer/src/models"
+
+	"github.com/dumunari/k8s-observer/src/api/repositories"
+	"github.com/dumunari/k8s-observer/src/models"
 )
 
 type DeploymentsService struct {

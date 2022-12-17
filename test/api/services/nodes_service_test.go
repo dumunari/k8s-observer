@@ -3,11 +3,12 @@ package services
 import (
 	"errors"
 	"fmt"
+	"testing"
+
+	"github.com/dumunari/k8s-observer/src/api/services"
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"observer/src/api/services"
-	"testing"
 )
 
 func TestRetrieveNodesSuccess(t *testing.T) {

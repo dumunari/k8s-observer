@@ -3,9 +3,10 @@ package alerts
 import (
 	"encoding/json"
 	"fmt"
-	v1 "k8s.io/api/core/v1"
 	"log"
-	"observer/src/models"
+
+	"github.com/dumunari/k8s-observer/src/models"
+	v1 "k8s.io/api/core/v1"
 )
 
 func NodesCheck() {
@@ -17,7 +18,7 @@ func NodesCheck() {
 		return
 	}
 
-	for _, nodeInList := range nodeList.Items{
+	for _, nodeInList := range nodeList.Items {
 		if isNodeUnhealthy(nodeInList) {
 			nodeInfo := &models.Node{
 				Name:           nodeInList.Name,

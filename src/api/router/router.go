@@ -1,8 +1,8 @@
 package router
 
 import (
+	"github.com/dumunari/k8s-observer/src/api/router/routes"
 	"github.com/gorilla/mux"
-	"observer/src/api/router/routes"
 )
 
 func GenerateRouter() *mux.Router {

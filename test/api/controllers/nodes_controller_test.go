@@ -4,27 +4,28 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"observer/src/api/controllers"
-	"observer/src/models"
 	"testing"
+
+	"github.com/dumunari/k8s-observer/src/api/controllers"
+	"github.com/dumunari/k8s-observer/src/models"
 )
 
-func TestGetNodesSuccess(t *testing.T){
+func TestGetNodesSuccess(t *testing.T) {
 	//arrange
 	clusterNodes := []models.Node{
 		{
-			Name: "deployment-one",
-			DiskPressure: "False",
+			Name:           "deployment-one",
+			DiskPressure:   "False",
 			MemoryPressure: "False",
-			PIDPressure: "False",
-			Ready: "True",
+			PIDPressure:    "False",
+			Ready:          "True",
 		},
 		{
-			Name: "deployment-one",
-			DiskPressure: "True",
+			Name:           "deployment-one",
+			DiskPressure:   "True",
 			MemoryPressure: "False",
-			PIDPressure: "False",
-			Ready: "False",
+			PIDPressure:    "False",
+			Ready:          "False",
 		},
 	}
 	retrieveNodes = func() ([]models.Node, error) {
@@ -42,8 +43,8 @@ func TestGetNodesSuccess(t *testing.T){
 	resUtils.On("JSON", writer, statusCode, clusterNodes)
 
 	dpCtrl := controllers.NodesController{
-		NodesService: 		ndSvc,
-		ResponseUtils:      resUtils,
+		NodesService:  ndSvc,
+		ResponseUtils: resUtils,
 	}
 
 	dpCtrl.GetNodes(writer, request)
@@ -55,7 +56,7 @@ func TestGetNodesSuccess(t *testing.T){
 	resUtils.AssertNotCalled(t, "Error")
 }
 
-func TestGetNodesError(t *testing.T){
+func TestGetNodesError(t *testing.T) {
 	//arrange
 	var clusterNodes []models.Node
 
@@ -74,8 +75,8 @@ func TestGetNodesError(t *testing.T){
 	resUtils.On("Error", writer, statusCode, errors.New("service error"))
 
 	ndCtrl := controllers.NodesController{
-		NodesService: 		ndSvc,
-		ResponseUtils:      resUtils,
+		NodesService:  ndSvc,
+		ResponseUtils: resUtils,
 	}
 
 	ndCtrl.GetNodes(writer, request)

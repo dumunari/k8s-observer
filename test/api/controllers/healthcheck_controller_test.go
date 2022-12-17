@@ -5,10 +5,11 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
-	"observer/src/api/controllers"
-	"observer/src/models"
 	"os"
 	"testing"
+
+	"github.com/dumunari/k8s-observer/src/api/controllers"
+	"github.com/dumunari/k8s-observer/src/models"
 )
 
 func TestMain(m *testing.M) {
@@ -16,7 +17,7 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestGetHealthcheck(t *testing.T){
+func TestGetHealthcheck(t *testing.T) {
 	//arrange
 	writer := httptest.NewRecorder()
 	request := httptest.NewRequest("GET", "/healthcheck", nil)
@@ -36,5 +37,3 @@ func TestGetHealthcheck(t *testing.T){
 	//assert
 	responseUtils.AssertCalled(t, "JSON", writer, statusCode, message)
 }
-
-

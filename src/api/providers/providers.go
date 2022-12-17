@@ -1,10 +1,10 @@
 package providers
 
 import (
-	"observer/src/api/repositories"
-	"observer/src/api/services"
-	"observer/src/api/utils"
-	"observer/src/infrastructure/client"
+	"github.com/dumunari/k8s-observer/src/api/repositories"
+	"github.com/dumunari/k8s-observer/src/api/services"
+	"github.com/dumunari/k8s-observer/src/api/utils"
+	"github.com/dumunari/k8s-observer/src/infrastructure/client"
 )
 
 func ProvideResponseUtils() *utils.Response {
@@ -41,6 +41,6 @@ func ProvideResource() *client.Resources {
 	}
 }
 
-func ProvideConfig() *client.Config{
+func ProvideConfig() *client.Config {
 	return &client.Config{}
 }

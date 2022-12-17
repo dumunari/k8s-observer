@@ -2,13 +2,14 @@ package repositories
 
 import (
 	"fmt"
+	"log"
+
+	"github.com/dumunari/k8s-observer/src/infrastructure/client"
 	v1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
-	"log"
-	"observer/src/infrastructure/client"
 )
 
-type DeploymentsRepository struct{
+type DeploymentsRepository struct {
 	Resources client.ResourcesInterface
 }
 

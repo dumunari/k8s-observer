@@ -3,11 +3,12 @@ package controllers
 import (
 	"log"
 	"net/http"
-	"observer/src/api/services"
-	"observer/src/api/utils"
+
+	"github.com/dumunari/k8s-observer/src/api/services"
+	"github.com/dumunari/k8s-observer/src/api/utils"
 )
 
-type NodesController struct{
+type NodesController struct {
 	NodesService  services.NodesServiceInterface
 	ResponseUtils utils.ResponseInterface
 }

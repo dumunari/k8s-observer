@@ -1,16 +1,17 @@
 package routes
 
 import (
-	"github.com/gorilla/mux"
 	"net/http"
-	"observer/src/api/controllers"
-	"observer/src/api/providers"
+
+	"github.com/dumunari/k8s-observer/src/api/controllers"
+	"github.com/dumunari/k8s-observer/src/api/providers"
+	"github.com/gorilla/mux"
 )
 
 var (
 	deploymentsController controllers.DeploymentsController
-	healthController controllers.HealtcheckController
-	nodesController controllers.NodesController
+	healthController      controllers.HealtcheckController
+	nodesController       controllers.NodesController
 )
 
 func init() {
@@ -23,7 +24,7 @@ func init() {
 	}
 
 	healthController = controllers.HealtcheckController{
-		ResponseUtils:      responseUtils,
+		ResponseUtils: responseUtils,
 	}
 
 	deploymentsController = controllers.DeploymentsController{

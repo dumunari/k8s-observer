@@ -3,9 +3,10 @@ package alerts
 import (
 	"encoding/json"
 	"fmt"
-	v1 "k8s.io/api/apps/v1"
 	"log"
-	"observer/src/models"
+
+	"github.com/dumunari/k8s-observer/src/models"
+	v1 "k8s.io/api/apps/v1"
 )
 
 func DeploymentsCheck() {
@@ -17,7 +18,7 @@ func DeploymentsCheck() {
 		return
 	}
 
-	for _, deploymentInList := range deploymentsList.Items{
+	for _, deploymentInList := range deploymentsList.Items {
 		if hasUnavailableReplicas(deploymentInList) {
 			deploymentInfo := &models.Deployment{
 				Name:                deploymentInList.Name,

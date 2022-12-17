@@ -1,15 +1,16 @@
 package controllers
 
 import (
-	"github.com/stretchr/testify/mock"
 	"net/http"
-	"observer/src/models"
+
+	"github.com/dumunari/k8s-observer/src/models"
+	"github.com/stretchr/testify/mock"
 )
 
 var retrieveDeployments func() ([]models.Deployment, error)
 var retrieveNodes func() ([]models.Node, error)
 
-type deploymentsServiceMock struct{
+type deploymentsServiceMock struct {
 	mock.Mock
 }
 
@@ -27,7 +28,7 @@ func (nodesServiceMock *nodesServiceMock) RetrieveNodes() ([]models.Node, error)
 	return retrieveNodes()
 }
 
-type responseUtilsMock struct{
+type responseUtilsMock struct {
 	mock.Mock
 }
 

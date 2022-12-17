@@ -1,10 +1,11 @@
 package alerts
 
 import (
-	"github.com/robfig/cron"
 	"log"
-	"observer/src/api/providers"
-	"observer/src/infrastructure/client"
+
+	"github.com/dumunari/k8s-observer/src/api/providers"
+	"github.com/dumunari/k8s-observer/src/infrastructure/client"
+	"github.com/robfig/cron"
 )
 
 var resources client.Resources
@@ -15,7 +16,7 @@ func init() {
 	}
 }
 
-func StartAlertsSchedule(){
+func StartAlertsSchedule() {
 	log.Println("[Alerts] - StartAlertsSchedule")
 
 	c := cron.New()

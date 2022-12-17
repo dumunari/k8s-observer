@@ -4,24 +4,25 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"observer/src/api/controllers"
-	"observer/src/models"
 	"testing"
+
+	"github.com/dumunari/k8s-observer/src/api/controllers"
+	"github.com/dumunari/k8s-observer/src/models"
 )
 
-func TestGetDeploymentsSuccess(t *testing.T){
+func TestGetDeploymentsSuccess(t *testing.T) {
 	//arrange
 	clusterDeployments := []models.Deployment{
 		{
-			Name: "deployment-one",
-			RunningReplicas: 1,
-			DesiredReplicas: 1,
+			Name:                "deployment-one",
+			RunningReplicas:     1,
+			DesiredReplicas:     1,
 			UnavailableReplicas: 0,
 		},
 		{
-			Name: "deployment-two",
-			RunningReplicas: 1,
-			DesiredReplicas: 2,
+			Name:                "deployment-two",
+			RunningReplicas:     1,
+			DesiredReplicas:     2,
 			UnavailableReplicas: 1,
 		},
 	}
@@ -53,7 +54,7 @@ func TestGetDeploymentsSuccess(t *testing.T){
 	resUtils.AssertNotCalled(t, "Error")
 }
 
-func TestGetDeploymentsError(t *testing.T){
+func TestGetDeploymentsError(t *testing.T) {
 	//arrange
 	var clusterDeployments []models.Deployment
 
