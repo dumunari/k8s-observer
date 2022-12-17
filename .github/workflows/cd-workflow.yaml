@@ -1,0 +1,68 @@
+name: CD Workflow
+
+on:
+  push:
+    branches: [application-set]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check GITHUBSHA
+      run: |
+        echo ${{github.sha}}
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and push
+      uses: docker/build-push-action@v1.1.0
+      with:
+        username: ${{secrets.DOCKERHUB_USER}}
+        password: ${{secrets.DOCKERHUB_PASSWD}}
+        repository: ${{secrets.DOCKERHUB_USER}}/k8s-observer
+        tags: ${{github.sha}}, latest
+
+  update:
+    name: Update K8s Observer application set
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Check GITHUBSHA
+      run: |
+        echo ${{github.sha}}
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with: 
+        repository: dumunari/gitops-essentials
+        ref: 'application-set'
+        github_token: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Setup Kustomize
+      uses: imranismail/setup-kustomize@v1
+      with:
+        kustomize-version: "3.6.1"
+
+    - name: Update Kubernetes Resources
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKERHUB_USER}}
+      run: |
+        cd apps/k8s-observer
+        kustomize edit set image k8s-observer=$DOCKER_USERNAME/k8s-observer:$GITHUB_SHA
+
+    - name: Commit new tag
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "[K8s Observer] Auto Trigger"
+        git commit -am "Bump k8s observer version"
+
+    - name: Push
+      uses: ad-m/github-push-action@master
+      with: 
+        repository: dumunari/gitops-essentials
+        ref: 'application-set'
+        github_token: ${{secrets.GITHUB_TOKEN}}
