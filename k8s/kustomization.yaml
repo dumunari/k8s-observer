@@ -7,4 +7,4 @@ resources:
 images:
 - name: k8s-observer
   newName: emunari/k8s-observer
-  newTag: 10640eb424294a549d97a8d249b46c94641dce23
+  newTag: bf6ac660a4abf7507599ff513320ba335a33c9d0
