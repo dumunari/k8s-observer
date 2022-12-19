@@ -2,17 +2,14 @@ name: CD Workflow
 
 on:
   push:
-    branches: [application-set]
+    branches: [main]
 
 jobs:
   build:
-    name: Build
+    name: Build and Push K8s Observer Image
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check GITHUBSHA
-      run: |
-        echo ${{github.sha}}
 
     - name: Checkout code
       uses: actions/checkout@v2
@@ -26,21 +23,15 @@ jobs:
         tags: ${{github.sha}}, latest
 
   update:
-    name: Update K8s Observer application set
+    name: Update K8s Observer k8s files
+    needs: 
+      - build
     runs-on: ubuntu-latest
 
     steps:
 
-    - name: Check GITHUBSHA
-      run: |
-        echo ${{github.sha}}
-
     - name: Checkout code
-      uses: actions/checkout@v3
-      with: 
-        repository: dumunari/gitops-essentials
-        ref: 'application-set'
-        github_token: ${{secrets.GITHUB_TOKEN}}
+      uses: actions/checkout@v2
 
     - name: Setup Kustomize
       uses: imranismail/setup-kustomize@v1
@@ -58,11 +49,10 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "[K8s Observer] Auto Trigger"
-        git commit -am "Bump k8s observer version"
+        git commit -am "Bump K8s Observer version"
 
     - name: Push
       uses: ad-m/github-push-action@master
       with: 
-        repository: dumunari/gitops-essentials
-        ref: 'application-set'
-        github_token: ${{secrets.GITHUB_TOKEN}}
+        repository: dumunari/k8s-observer
+        github_token: ${{ secrets.GITHUB_TOKEN }}
