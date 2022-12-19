@@ -51,7 +51,7 @@ jobs:
       env:
         DOCKER_USERNAME: ${{secrets.DOCKERHUB_USER}}
       run: |
-        cd apps/k8s-observer
+        cd k8s
         kustomize edit set image k8s-observer=$DOCKER_USERNAME/k8s-observer:$GITHUB_SHA
 
     - name: Commit new tag
