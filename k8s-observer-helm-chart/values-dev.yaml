@@ -1,7 +1,7 @@
 image:
   repository: emunari/k8s-observer
   pullPolicy: IfNotPresent
-  tag: 940c317aa9d22cc843c2dd70dc82966ac5735b70
+  tag: 14407151bac5a683bbaee9b81c6b90dd14ad43a2
 
 service:
   port: 5000
