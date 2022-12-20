@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-observer
+spec:
+  selector:
+    matchLabels:
+      app: k8s-observer
+  template:
+    metadata:
+      labels:
+        app: k8s-observer
+    spec:
+      containers:
+      - name: k8s-observer
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        env:
+          - name: IN_CLUSTER
+            value: "true"
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: {{ .Values.service.port }}
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: {{ .Values.service.port }}
