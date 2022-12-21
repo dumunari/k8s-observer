@@ -1,7 +1,0 @@
-image:
-  repository: emunari/k8s-observer
-  pullPolicy: IfNotPresent
-  tag: latest
-
-service:
-  port: 5000
