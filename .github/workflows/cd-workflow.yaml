@@ -2,7 +2,7 @@ name: CD Workflow
 
 on:
   push:
-    branches: [appset-helm]
+    branches: [appset-helm-deps]
 
 jobs:
   build:
@@ -13,10 +13,6 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@v2
-      with:
-        ref: appset-helm
-        repository: dumunari/k8s-observer
-        github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push
       uses: docker/build-push-action@v1.1.0
@@ -25,32 +21,3 @@ jobs:
         password: ${{secrets.DOCKERHUB_PASSWD}}
         repository: ${{secrets.DOCKERHUB_USER}}/k8s-observer
         tags: ${{github.sha}}, latest
-
-  update:
-    name: Update K8s Observer tag on values file
-    needs: 
-      - build
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        ref: appset-helm
-        repository: dumunari/k8s-observer
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Update image tag on values file and commit changes
-      run: |
-        sed -ie "s/tag:.*/tag: ${{github.sha}}/g" k8s-observer-helm-chart/values-dev.yaml 
-        git config --local user.email "action@github.com"
-        git config --local user.name "[K8s Observer] Auto Trigger"
-        git commit -am "Bump K8s Observer version"
-
-    - name: Push
-      uses: ad-m/github-push-action@master
-      with: 
-        branch: appset-helm
-        repository: dumunari/k8s-observer
-        github_token: ${{ secrets.GITHUB_TOKEN }}
