@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	log.Println("k8s Observer Started")
+	log.Println("k8s Observer Started!")
 
 	alerts.StartAlertsSchedule()
 
