@@ -14,7 +14,7 @@ func DeploymentsCheck() {
 
 	deploymentsList, err := resources.RetrieveDeploymentList()
 	if err != nil {
-		log.Println("[Alerts] - Error on resources.RetrieveDeploymentList")
+		log.Printf("[Alerts] - Error on resources.RetrieveDeploymentList: %s", err)
 		return
 	}
 
