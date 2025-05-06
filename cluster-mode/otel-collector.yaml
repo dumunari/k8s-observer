@@ -1,0 +1,32 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-collector-ds
+spec:
+  mode: daemonset
+  image: otel/opentelemetry-collector-contrib:0.123.0
+  hostNetwork: true
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+    processors:
+      filter/drop_healthcheck:
+        traces:
+          span:
+          - attributes["url.path"] == "/healthcheck"
+    exporters:
+      otlp:
+        endpoint: http://jaeger-collector.jaeger:4317
+        tls:
+          insecure: true
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [filter/drop_healthcheck]
+          exporters: [otlp]

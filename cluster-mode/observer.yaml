@@ -15,22 +15,43 @@ spec:
         service: k8s-observer
     spec:
       serviceAccountName: k8s-observer
+      shareProcessNamespace: true
       containers:
-        - name: k8s-observer
-          image: docker.io/emunari/k8s-observer:latest
-          ports:
-            - containerPort: 5000
-          env:
-            - name: IN_CLUSTER
-              value: "true"
-          livenessProbe:
-            httpGet:
-              path: /healthcheck
-              port: 5000
-          readinessProbe:
-            httpGet:
-              path: /healthcheck
-              port: 5000
+      - name: autoinstrumentation-go
+        image: otel/autoinstrumentation-go
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: OTEL_GO_AUTO_TARGET_EXE
+            value: "/go/src/k8s-observer/k8s-observer"
+          - name: OTEL_RESOURCE_ATTRIBUTES
+            value: "service.name=k8s-observer,service.version=0.1.0,service.namespace=default"
+          - name: NODE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://$(NODE_IP):4318
+        securityContext:
+          runAsUser: 0
+          privileged: true
+      - name: k8s-observer
+        image: docker.io/emunari/k8s-observer:latest
+        securityContext:
+          runAsUser: 0
+          privileged: true
+        ports:
+          - containerPort: 5000
+        env:
+          - name: IN_CLUSTER
+            value: "true"
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 5000
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 5000
 ---
 apiVersion: v1
 kind: Service
